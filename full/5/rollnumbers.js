@@ -5,10 +5,11 @@ const RESULTS_CSV = 'results.csv';
 const OUTPUT_FILE = 'rollnumbers.csv';
 const START_ROLL = 36378;
 const END_ROLL = 36490;
+const CUSTOM_ROLLS = []
 
 async function getExistingRolls() {
     const rolls = new Set();
-    
+
     if (!fs.existsSync(RESULTS_CSV)) {
         console.log(`${RESULTS_CSV} not found. Generating all roll numbers.`);
         return null; // Indicate that the file does not exist
@@ -36,6 +37,15 @@ async function findMissingRolls() {
             const rollStr = roll.toString().padStart(6, '0');
             if (!existingRolls || !existingRolls.has(rollStr)) {
                 missing.push(rollStr);
+            }
+        }
+
+        if (CUSTOM_ROLLS) {
+            for (const roll of CUSTOM_ROLLS) {
+                const rollStr = roll.toString().padStart(6, '0');
+                if (!existingRolls || !existingRolls.has(rollStr)) {
+                    missing.push(rollStr);
+                }
             }
         }
 

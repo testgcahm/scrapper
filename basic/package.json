@@ -1,8 +1,9 @@
 {
-  "name": "5thyear",
+  "name": "basic",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "csvToExcel.js",
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

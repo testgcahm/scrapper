@@ -92,34 +92,10 @@ async function scrapeResults() {
             // Check for result page
             if (page.url().includes('/Results/dtl')) {
                 const resultElement = await page.$('#MainContent_GTot');
-                const cmedElement = await page.$('#MainContent_CommunityMedicineMO');
-                const cmedResultElement = await page.$('#MainContent_CommunityMedicineResult');
-                const cmedTotalElement = await page.$('#MainContent_CommunityMedicineTM');
-                const entElement = await page.$('#MainContent_OtorhinolaryngologyMO');
-                const entResultElement = await page.$('#MainContent_OtorhinolaryngologyResult');
-                const entTotalElement = await page.$('#MainContent_OtorhinolaryngologyTM');
-                const eyeElement = await page.$('#MainContent_OphthalmologyMO');
-                const eyeResultElement = await page.$('#MainContent_OphthalmologyResult');
-                const eyeTotalElement = await page.$('#MainContent_OphthalmologyTM');
-                const pathoElement = await page.$('#MainContent_SpecialPathologyMO');
-                const pathoResultElement = await page.$('#MainContent_SpecialPathologyResult');
-                const pathoTotalElement = await page.$('#MainContent_SpecialPathologyTM');
-                if (resultElement && cmedElement && entElement && eyeElement && pathoElement && cmedResultElement && entResultElement && eyeResultElement && pathoResultElement) {
+                if (resultElement) {
                     const result = await page.evaluate(el => el.textContent.trim(), resultElement);
-                    const cmed = await page.evaluate(el => el.textContent.trim(), cmedElement);
-                    const ent = await page.evaluate(el => el.textContent.trim(), entElement);
-                    const eye = await page.evaluate(el => el.textContent.trim(), eyeElement);
-                    const patho = await page.evaluate(el => el.textContent.trim(), pathoElement);
-                    const cmedResult = await page.evaluate(el => el.textContent.trim(), cmedResultElement);
-                    const entResult = await page.evaluate(el => el.textContent.trim(), entResultElement);
-                    const eyeResult = await page.evaluate(el => el.textContent.trim(), eyeResultElement);
-                    const pathoResult = await page.evaluate(el => el.textContent.trim(), pathoResultElement);
-                    const cmedTotal = await page.evaluate(el => el.textContent.trim(), cmedTotalElement);
-                    const entTotal = await page.evaluate(el => el.textContent.trim(), entTotalElement);
-                    const eyeTotal = await page.evaluate(el => el.textContent.trim(), eyeTotalElement);
-                    const pathoTotal = await page.evaluate(el => el.textContent.trim(), pathoTotalElement);
-                    console.log(`FOUND: ${name} - ${rollNoStr}: ${result || 'Failed'} - ${cmed} - ${cmedResult} - ${cmedTotal} - ${ent} - ${entResult} - ${entTotal} - ${eye} - ${eyeResult} - ${eyeTotal} - ${patho} - ${pathoResult} - ${pathoTotal}`);
-                    await appendToResultsFile(rollNoStr, name, `${result || 'Failed'},${cmed},${cmedResult},${cmedTotal},${ent},${entResult},${entTotal},${eye},${eyeResult},${eyeTotal},${patho},${pathoResult},${pathoTotal}`);
+                    console.log(`FOUND: ${name} - ${rollNoStr}: ${result || 'Failed'}`);
+                    await appendToResultsFile(rollNoStr, name, `${result || 'Failed'}`);
                     found = true;
                     processed.add(rollNoStr);
                     processedRollNumbers.add(rollNoStr);

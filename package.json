@@ -11,8 +11,8 @@
   "license": "ISC",
   "type": "commonjs",
   "workspaces": [
-    "4thYear",
-    "5thYear"
+    "basic",
+    "full"
   ],
   "dependencies": {
     "csv-parser": "^3.2.0",
