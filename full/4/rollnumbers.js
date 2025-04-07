@@ -4,8 +4,10 @@ const csv = require('csv-parser');
 const RESULTS_CSV = 'results.csv';
 const OUTPUT_FILE = 'rollnumbers.csv';
 const START_ROLL = 36378;
-const END_ROLL = 36490;
-const CUSTOM_ROLLS = []
+const END_ROLL = 36378;
+const CUSTOM_ROLLS = [];
+
+const USE_CUSTOM = process.argv.includes('-r');
 
 async function getExistingRolls() {
     const rolls = new Set();
@@ -33,10 +35,12 @@ async function findMissingRolls() {
         const existingRolls = await getExistingRolls();
         const missing = [];
 
-        for (let roll = START_ROLL; roll <= END_ROLL; roll++) {
-            const rollStr = roll.toString().padStart(6, '0');
-            if (!existingRolls || !existingRolls.has(rollStr)) {
-                missing.push(rollStr);
+        if (!USE_CUSTOM) {
+            for (let roll = START_ROLL; roll <= END_ROLL; roll++) {
+                const rollStr = roll.toString().padStart(6, '0');
+                if (!existingRolls || !existingRolls.has(rollStr)) {
+                    missing.push(rollStr);
+                }
             }
         }
 

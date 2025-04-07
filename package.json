@@ -12,7 +12,8 @@
   "type": "commonjs",
   "workspaces": [
     "basic",
-    "full"
+    "full",
+    "moderate"
   ],
   "dependencies": {
     "csv-parser": "^3.2.0",

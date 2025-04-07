@@ -94,20 +94,18 @@ async function scrapeResults() {
                         const columns = row.querySelectorAll('td');
                         if (columns.length >= 7) {
                             const subjectName = columns[1]?.textContent.trim();
-                            const theory = columns[2]?.textContent.trim() || '0';
-                            const practical = columns[parseInt(year) === 5? 4: 3]?.textContent.trim() || '0';
                             const obtainedMarks = columns[parseInt(year) === 5 ? 5 : 4]?.textContent.trim();
                             const totalMarks = columns[parseInt(year) === 5 ? 6 : 5]?.textContent.trim();
                             const result = columns[parseInt(year) === 5 ? 7 : 6]?.textContent.trim();
-                            subjects.push(`${subjectName} - Th:${theory}& Pr:${practical}& ${obtainedMarks}/${totalMarks} (${result})`);
+                            subjects.push(`${subjectName}:${obtainedMarks}/${totalMarks}(${result})`);
                         }
                     });
 
                     return subjects;
-                }, YEAR);
+                }, YEAR);            
 
                 if (results.length > 0) {
-                    console.log(`FOUND: ${rollNoStr} - ${name}: ${totalResult} - ${results.join(' | ')}`);
+                    console.log(`FOUND: ${name} - ${rollNoStr}: ${totalResult || 'Failed'} - ${results.join(' | ')}`);
                     await appendToResultsFile(rollNoStr, name, totalResult || 'Failed', results);
                     found = true;
                     processedRollNumbersFromResult.add(rollNoStr);
@@ -116,13 +114,13 @@ async function scrapeResults() {
                     rollNumbers = rollNumbers.filter(roll => roll !== rollNoStr);
                     fs.writeFileSync(ROLLNUMBERS_FILE, rollNumbers.join('\n'));
                 }
-
                 await page.goBack({ waitUntil: 'networkidle2' });
                 break;
             } else {
+                // Check for error message
                 const error = await page.$eval('#MainContent_Label2', el => el.textContent.trim()).catch(() => '');
                 if (error === 'No Record Found!') {
-                    console.log(`No Record: ${rollNoStr} - ${name}`);
+                    console.log(`No match: ${name} - ${rollNoStr}`);
                 }
             }
         }
@@ -130,7 +128,9 @@ async function scrapeResults() {
             console.log(`No valid roll number found for: ${name}`);
         }
     }
+
     await browser.close();
 }
 
+// Run script with provided inputs
 scrapeResults().catch(console.error);
